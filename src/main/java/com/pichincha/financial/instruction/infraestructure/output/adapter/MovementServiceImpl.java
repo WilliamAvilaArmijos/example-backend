@@ -4,6 +4,7 @@ import com.pichincha.financial.instruction.application.output.port.MovementOutpu
 import com.pichincha.financial.instruction.domain.Movement;
 import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.mapper.MovementMapper;
 import com.pichincha.financial.instruction.infraestructure.output.repository.AccountRepository;
+import com.pichincha.financial.instruction.infraestructure.output.repository.ClientRepository;
 import com.pichincha.financial.instruction.infraestructure.output.repository.MovementRepository;
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.AccountData;
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.MovementData;
@@ -19,10 +20,10 @@ import java.util.List;
 public class MovementServiceImpl implements MovementOutputPort {
     private final MovementRepository movementRepository;
     private final AccountRepository accountRepository;
+    private final ClientRepository clientRepository;
     private final MovementMapper movementMapper;
 
     @Override
-    //@Transactional
     public Movement createMovement(Movement movement) {
         AccountData account = accountRepository.findById(movement.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
@@ -46,6 +47,14 @@ public class MovementServiceImpl implements MovementOutputPort {
                 .toList();
     }
 
+    @Override
+    public List<Movement> findByAccountAndDateBetween(Integer accountId, LocalDateTime init, LocalDateTime end) {
+        return movementRepository.findByAccountIdAndDateBetween(accountId, init, end)
+                .stream()
+                .map(movementMapper::toDomain)
+                .toList();
+    }
+
     private BigDecimal calculateNewBalance(BigDecimal currentBalance, String type, BigDecimal amount) {
         if ("CREDITO".equalsIgnoreCase(type)) {
             return currentBalance.add(amount);
@@ -57,4 +66,27 @@ public class MovementServiceImpl implements MovementOutputPort {
             throw new RuntimeException("Tipo de movimiento inválido");
         }
     }
+
+    @Override
+    public BigDecimal calculateInitBalanceBefore(Integer accountId, LocalDateTime reportStartDate) {
+        var lastMovementBefore = movementRepository
+                .findTopByAccountIdAndDateBeforeOrderByDateDesc(accountId, reportStartDate);
+        if (lastMovementBefore.isPresent()) {
+            return lastMovementBefore.get().getBalance();
+        }
+        var firstMovement = movementRepository
+                .findTopByAccountIdOrderByDateAsc(accountId);
+        if (firstMovement.isPresent()) {
+            MovementData mov = firstMovement.get();
+            if ("CREDITO".equalsIgnoreCase(mov.getType())) {
+                return mov.getBalance().subtract(mov.getAmount());
+            } else if ("DEBITO".equalsIgnoreCase(mov.getType())) {
+                return mov.getBalance().add(mov.getAmount());
+            }
+        }
+        AccountData account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
+        return account.getBalance();
+    }
+
 }
