@@ -15,10 +15,7 @@ import com.pichincha.financial.instruction.infraestructure.output.repository.Cli
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.ReportData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -29,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reportes")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class ReportController {
 

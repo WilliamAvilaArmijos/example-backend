@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MovementOutputPort {
+    List<Movement> getAllMovements();
     Movement createMovement(Movement movement);
     List<Movement> getMovementsByAccountId(Integer accountId);
     BigDecimal calculateInitBalanceBefore(Integer accountId, LocalDateTime reportStartDate);

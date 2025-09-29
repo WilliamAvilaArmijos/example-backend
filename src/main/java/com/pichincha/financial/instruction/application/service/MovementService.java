@@ -16,6 +16,11 @@ public class MovementService implements MovementInputPort {
     private final MovementOutputPort movementOutputPort;
 
     @Override
+    public List<Movement> getAllMovements() {
+        return movementOutputPort.getAllMovements();
+    }
+
+    @Override
     public Movement createMovement(Movement movement) {
         return movementOutputPort.createMovement(movement);
     }

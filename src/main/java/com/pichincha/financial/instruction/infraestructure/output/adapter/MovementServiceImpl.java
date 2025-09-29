@@ -14,14 +14,22 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class MovementServiceImpl implements MovementOutputPort {
     private final MovementRepository movementRepository;
     private final AccountRepository accountRepository;
-    private final ClientRepository clientRepository;
     private final MovementMapper movementMapper;
+
+    @Override
+    public List<Movement> getAllMovements() {
+        return movementRepository.findAll()
+                .stream()
+                .map(movementMapper::toDomain)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Movement createMovement(Movement movement) {
