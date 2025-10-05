@@ -1,7 +1,6 @@
 package com.pichincha.financial.instruction.domain;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
@@ -13,6 +12,6 @@ public class Account {
     private String accountNumber;
     private BigDecimal balance;
     private String accountType;
-    private String status;
+    private Boolean status;
     private Integer clientId;
 }

@@ -2,6 +2,9 @@ package com.pichincha.financial.instruction.infraestructure.input.adapter.rest.i
 
 import com.pichincha.financial.instruction.application.input.port.ClientInputPort;
 import com.pichincha.financial.instruction.domain.Client;
+import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.dto.ClientRequest;
+import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.mapper.ClientMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/clientes")
 public class ClientController {
     private final ClientInputPort clientInputPort;
+    private final ClientMapper clientMapper;
 
     @GetMapping
     public ResponseEntity<List<Client>> allClients(){
@@ -32,9 +36,9 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<Client> create(@RequestBody Client client) {
-        Client created = clientInputPort.saveClient(client);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<Client> create(@Valid @RequestBody ClientRequest client) {
+        Client created = clientInputPort.saveClient(clientMapper.toDomainReq(client));
+        return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")

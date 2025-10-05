@@ -122,7 +122,7 @@ public class ReportController {
                 table.addCell(r.getAccountNumber());
                 table.addCell(r.getAccountType());
                 table.addCell(r.getInitBalance().toString());
-                table.addCell(r.getStatus());
+                table.addCell(r.getStatus().toString());
                 table.addCell(r.getAmount().toString());
                 table.addCell(r.getBalance().toString());
             }

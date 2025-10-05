@@ -12,7 +12,7 @@ public class ReportData {
     private String accountNumber;
     private String accountType;
     private BigDecimal initBalance;
-    private String status;
+    private Boolean status;
     private BigDecimal amount;
     private BigDecimal balance;
 }

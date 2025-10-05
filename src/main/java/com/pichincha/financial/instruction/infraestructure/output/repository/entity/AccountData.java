@@ -21,7 +21,7 @@ public class AccountData {
     private String accountNumber;
     private BigDecimal balance;
     private String accountType;
-    private String status;
+    private Boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
