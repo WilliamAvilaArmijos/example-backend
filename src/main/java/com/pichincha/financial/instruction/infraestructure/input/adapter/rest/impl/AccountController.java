@@ -3,6 +3,7 @@ package com.pichincha.financial.instruction.infraestructure.input.adapter.rest.i
 import com.pichincha.financial.instruction.application.input.port.AccountInputPort;
 import com.pichincha.financial.instruction.domain.Account;
 import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.dto.AccountRequest;
+import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.dto.ClientRequest;
 import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.mapper.AccountMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +55,13 @@ public class AccountController {
         Account updated = accountInputPort.updateAccount(id, account);
         AccountRequest response = accountMapper.toRequest(updated);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountRequest> getById(@PathVariable Integer id) {
+        return accountInputPort.findById(id)
+                .map(accountMapper::toRequest)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

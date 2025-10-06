@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class AccountService implements AccountInputPort {
     @Override
     public List<Account> getAccountsByClientId(Integer clientId) {
         return output.getAccountsByClientId(clientId);
+    }
+
+    @Override
+    public Optional<Account> findById(Integer id) {
+        return output.findById(id);
     }
 
     @Override

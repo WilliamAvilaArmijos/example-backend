@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +30,12 @@ public class AccountServiceImpl implements AccountOutputPort {
     @Override
     public List<Account> getAccountsByClientId(Integer clientId) {
         return accountRepository.findByClientId(clientId).stream().map(accountMapper::toDomain).toList();
+    }
+
+    @Override
+    public Optional<Account> findById(Integer id) {
+        return accountRepository.findById(id)
+                .map(accountMapper::toDomain);
     }
 
     @Override
