@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class MovementRequest {
+    private Integer id;
     @NotBlank
     @Size(max = 10)
     private String type;

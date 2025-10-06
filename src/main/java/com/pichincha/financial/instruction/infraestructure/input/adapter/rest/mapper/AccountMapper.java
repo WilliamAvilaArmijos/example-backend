@@ -23,6 +23,7 @@ public class AccountMapper {
 
     public Account toDomainReq(AccountRequest req) {
         return Account.builder()
+                .id(req.getId())
                 .accountNumber(req.getAccountNumber())
                 .accountType(req.getAccountType())
                 .balance(req.getBalance())
@@ -34,6 +35,7 @@ public class AccountMapper {
     public AccountRequest toRequest(Account account) {
         if (account == null) return null;
         AccountRequest request = new AccountRequest();
+        request.setId(account.getId());
         request.setAccountNumber(account.getAccountNumber());
         request.setAccountType(account.getAccountType());
         request.setBalance(account.getBalance());

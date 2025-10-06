@@ -24,6 +24,7 @@ public class MovementMapper {
 
     public Movement toDomainReq(MovementRequest req) {
         return Movement.builder()
+                .id(req.getId())
                 .date(LocalDateTime.now())
                 .type(req.getType())
                 .amount(req.getAmount())
@@ -34,6 +35,7 @@ public class MovementMapper {
     public MovementRequest toRequest(Movement movement) {
         if (movement == null) return null;
         MovementRequest request = new MovementRequest();
+        request.setId(movement.getId());
         request.setType(movement.getType());
         request.setAmount(movement.getAmount());
         request.setAccountId(movement.getAccountId());

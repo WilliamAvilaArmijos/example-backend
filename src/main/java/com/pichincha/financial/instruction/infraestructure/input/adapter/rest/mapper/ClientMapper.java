@@ -25,6 +25,7 @@ public class ClientMapper {
 
     public Client toDomainReq(ClientRequest req) {
         return Client.builder()
+                .id(req.getId())
                 .name(req.getName())
                 .gender(req.getGender())
                 .age(req.getAge())
@@ -39,6 +40,7 @@ public class ClientMapper {
     public ClientRequest toRequest(Client client) {
         if (client == null) return null;
         ClientRequest data = new ClientRequest();
+        data.setId(client.getId());
         data.setName(client.getName());
         data.setGender(client.getGender());
         data.setAge(client.getAge());
