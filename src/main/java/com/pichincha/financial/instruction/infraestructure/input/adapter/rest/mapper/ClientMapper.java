@@ -3,15 +3,10 @@ package com.pichincha.financial.instruction.infraestructure.input.adapter.rest.m
 import com.pichincha.financial.instruction.domain.Client;
 import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.dto.ClientRequest;
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.ClientData;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component
-//@Mapper(componentModel = "spring")
 public class ClientMapper {
-//    Client toDomain(ClientData data);
-//    ClientData toEntity(Client client);
-//    Client toDomainReq(ClientRequest req);
     public Client toDomain(ClientData data) {
         if (data == null) return null;
 
@@ -39,6 +34,20 @@ public class ClientMapper {
                 .password(req.getPassword())
                 .status(req.getStatus())
                 .build();
+    }
+
+    public ClientRequest toRequest(Client client) {
+        if (client == null) return null;
+        ClientRequest data = new ClientRequest();
+        data.setName(client.getName());
+        data.setGender(client.getGender());
+        data.setAge(client.getAge());
+        data.setIdentification(client.getIdentification());
+        data.setAddress(client.getAddress());
+        data.setPhone(client.getPhone());
+        data.setPassword(client.getPassword());
+        data.setStatus(client.getStatus());
+        return data;
     }
     public ClientData toEntity(Client client) {
         if (client == null) return null;

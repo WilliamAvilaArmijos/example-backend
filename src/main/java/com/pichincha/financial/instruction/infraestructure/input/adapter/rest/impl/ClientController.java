@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,29 +24,39 @@ public class ClientController {
     private final ClientMapper clientMapper;
 
     @GetMapping
-    public ResponseEntity<List<Client>> allClients(){
+    public ResponseEntity<List<ClientRequest>> allClients() {
         List<Client> clients = clientInputPort.getAllClients();
-        return ResponseEntity.ok(clients);
+        List<ClientRequest> clientRequests = clients.stream()
+                .map(clientMapper::toRequest)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(clientRequests);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClienteById(@PathVariable Integer id) {
+    public ResponseEntity<ClientRequest> getClienteById(@PathVariable Integer id) {
         return clientInputPort.findById(id)
+                .map(clientMapper::toRequest)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Client> create(@Valid @RequestBody ClientRequest client) {
-        Client created = clientInputPort.saveClient(clientMapper.toDomainReq(client));
-        return ResponseEntity.ok(created);
+    public ResponseEntity<ClientRequest> create(@Valid @RequestBody ClientRequest clientRequest) {
+        Client client = clientMapper.toDomainReq(clientRequest);
+        Client created = clientInputPort.saveClient(client);
+        ClientRequest response = clientMapper.toRequest(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable Integer id, @RequestBody Client client) {
+    public ResponseEntity<ClientRequest> update(
+            @PathVariable Integer id,
+            @Valid @RequestBody ClientRequest clientRequest) {
         try {
+            Client client = clientMapper.toDomainReq(clientRequest);
             Client updated = clientInputPort.updateClient(id, client);
-            return ResponseEntity.ok(updated);
+            ClientRequest response = clientMapper.toRequest(updated);
+            return ResponseEntity.ok(response);
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }

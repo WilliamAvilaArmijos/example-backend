@@ -1,9 +1,9 @@
 package com.pichincha.financial.instruction.infraestructure.input.adapter.rest.mapper;
 
 import com.pichincha.financial.instruction.domain.Account;
+import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.dto.AccountRequest;
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.AccountData;
 import com.pichincha.financial.instruction.infraestructure.output.repository.entity.ClientData;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +19,27 @@ public class AccountMapper {
                 .status(data.getStatus())
                 .clientId(data.getClient().getId())
                 .build();
+    }
+
+    public Account toDomainReq(AccountRequest req) {
+        return Account.builder()
+                .accountNumber(req.getAccountNumber())
+                .accountType(req.getAccountType())
+                .balance(req.getBalance())
+                .status(req.getStatus())
+                .clientId(req.getClientId())
+                .build();
+    }
+
+    public AccountRequest toRequest(Account account) {
+        if (account == null) return null;
+        AccountRequest request = new AccountRequest();
+        request.setAccountNumber(account.getAccountNumber());
+        request.setAccountType(account.getAccountType());
+        request.setBalance(account.getBalance());
+        request.setStatus(account.getStatus());
+        request.setClientId(account.getClientId());
+        return request;
     }
 
     public AccountData toEntity(Account account, ClientData clientData) {

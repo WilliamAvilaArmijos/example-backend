@@ -28,7 +28,7 @@ public class ClientData {
     private Integer age;
     @NotBlank
     @Size(min = 8, max = 10)
-    @Column(length = 10, nullable = false)
+    @Column(length = 20, nullable = false)
     private String identification;
     @Size(max = 150)
     @Column(length = 150)
