@@ -38,6 +38,11 @@ public class MovementData {
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50, nullable = false)
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
     private AccountData account;

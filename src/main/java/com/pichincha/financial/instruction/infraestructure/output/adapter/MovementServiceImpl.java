@@ -43,6 +43,7 @@ public class MovementServiceImpl implements MovementOutputPort {
         MovementData movementData = movementMapper.toEntity(movement, account);
         movementData.setBalance(newBalance);
         movementData.setDate(LocalDateTime.now());
+        movementData.setDescription(movement.getDescription());
 
         return movementMapper.toDomain(movementRepository.save(movementData));
     }

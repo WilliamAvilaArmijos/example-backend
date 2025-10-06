@@ -18,6 +18,7 @@ public class MovementMapper {
                 .type(data.getType())
                 .amount(data.getAmount())
                 .balance(data.getBalance())
+                .description(data.getDescription())
                 .accountId(data.getAccount().getId())
                 .build();
     }
@@ -28,6 +29,8 @@ public class MovementMapper {
                 .date(LocalDateTime.now())
                 .type(req.getType())
                 .amount(req.getAmount())
+                .date(req.getDate())
+                .description(req.getDescription())
                 .accountId(req.getAccountId())
                 .build();
     }
@@ -37,7 +40,9 @@ public class MovementMapper {
         MovementRequest request = new MovementRequest();
         request.setId(movement.getId());
         request.setType(movement.getType());
+        request.setDate(movement.getDate());
         request.setAmount(movement.getAmount());
+        request.setDescription(movement.getDescription());
         request.setAccountId(movement.getAccountId());
         return request;
     }
@@ -51,6 +56,7 @@ public class MovementMapper {
         data.setType(domain.getType());
         data.setAmount(domain.getAmount());
         data.setBalance(domain.getBalance());
+        data.setDescription(domain.getDescription());
         data.setAccount(accountData);
         return data;
     }

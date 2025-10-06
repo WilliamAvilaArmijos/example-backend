@@ -16,5 +16,6 @@ public class Movement {
     private String type;
     private BigDecimal amount;
     private BigDecimal balance;
+    private String description;
     private Integer accountId;
 }
