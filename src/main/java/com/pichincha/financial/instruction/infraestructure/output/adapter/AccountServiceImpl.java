@@ -2,6 +2,7 @@ package com.pichincha.financial.instruction.infraestructure.output.adapter;
 
 import com.pichincha.financial.instruction.application.output.port.AccountOutputPort;
 import com.pichincha.financial.instruction.domain.Account;
+import com.pichincha.financial.instruction.domain.Client;
 import com.pichincha.financial.instruction.infraestructure.input.adapter.rest.mapper.AccountMapper;
 import com.pichincha.financial.instruction.infraestructure.output.repository.AccountRepository;
 import com.pichincha.financial.instruction.infraestructure.output.repository.ClientRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
@@ -36,5 +38,18 @@ public class AccountServiceImpl implements AccountOutputPort {
 
         AccountData entity = accountMapper.toEntity(account, client);
         return accountMapper.toDomain(accountRepository.save(entity));
+    }
+
+    @Override
+    public Account updateAccount(Integer id, Account account) {
+        AccountData existingAccount = accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con ID: " + id));
+
+        ClientData client = clientRepository.findById(account.getClientId())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + account.getClientId()));
+
+        account.setId(id);
+        AccountData updated = accountRepository.save(accountMapper.toEntity(account, client));
+        return accountMapper.toDomain(updated);
     }
 }

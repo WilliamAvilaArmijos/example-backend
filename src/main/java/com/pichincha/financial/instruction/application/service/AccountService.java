@@ -3,6 +3,7 @@ package com.pichincha.financial.instruction.application.service;
 import com.pichincha.financial.instruction.application.input.port.AccountInputPort;
 import com.pichincha.financial.instruction.application.output.port.AccountOutputPort;
 import com.pichincha.financial.instruction.domain.Account;
+import com.pichincha.financial.instruction.domain.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,10 @@ public class AccountService implements AccountInputPort {
     @Override
     public Account saveAccount(Account account) {
         return output.saveAccount(account);
+    }
+
+    @Override
+    public Account updateAccount(Integer id, Account account) {
+        return output.updateAccount(id, account);
     }
 }

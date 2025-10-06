@@ -34,7 +34,7 @@ public class MovementServiceImpl implements MovementOutputPort {
     @Override
     public Movement createMovement(Movement movement) {
         AccountData account = accountRepository.findById(movement.getAccountId())
-                .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
+                .orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con ID: " + movement.getAccountId()));
 
         BigDecimal newBalance = calculateNewBalance(account.getBalance(), movement.getType(), movement.getAmount());
         account.setBalance(newBalance);
@@ -69,10 +69,10 @@ public class MovementServiceImpl implements MovementOutputPort {
             return currentBalance.add(amount);
         } else if ("DEBITO".equalsIgnoreCase(type)) {
             if (currentBalance.compareTo(amount) < 0)
-                throw new RuntimeException("Saldo insuficiente");
+                throw new IllegalStateException("Saldo insuficiente. Saldo actual: " + currentBalance + ", Monto solicitado: " + amount);
             return currentBalance.subtract(amount);
         } else {
-            throw new RuntimeException("Tipo de movimiento inválido");
+            throw new IllegalArgumentException("Tipo de movimiento inválido. Debe ser CREDITO o DEBITO");
         }
     }
 
@@ -94,7 +94,7 @@ public class MovementServiceImpl implements MovementOutputPort {
             }
         }
         AccountData account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
+                .orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con ID: " + accountId));
         return account.getBalance();
     }
 

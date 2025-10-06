@@ -45,4 +45,14 @@ public class AccountController {
         AccountRequest response = accountMapper.toRequest(created);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AccountRequest> update(
+            @PathVariable Integer id,
+            @Valid @RequestBody AccountRequest accountRequest) {
+        Account account = accountMapper.toDomainReq(accountRequest);
+        Account updated = accountInputPort.updateAccount(id, account);
+        AccountRequest response = accountMapper.toRequest(updated);
+        return ResponseEntity.ok(response);
+    }
 }
